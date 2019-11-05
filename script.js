@@ -1,6 +1,6 @@
 "use strict";
 
-let gTyping = false;
+let isTyping = false;
 let arr = []; // stores img URLs
 let placeholdersOnPage = 0;
 let currentPage = 1;
@@ -21,14 +21,14 @@ let endDetector = document.getElementById('endDetector');
 * Event Listeners
 */
 searchBar.onkeydown = function(e) {
-  if (gTyping) return;
-  gTyping = true;
+  if (isTyping) return;
+  isTyping = true;
   searchLoader.classList.add("loading");
 }
 
 searchBar.onkeyup = debounce(function() {
     searchLoader.classList.remove("loading");
-    gTyping = false;
+    isTyping = false;
     searchBarGo();
   }, 700);
 
@@ -84,11 +84,13 @@ function throttle(callback, interval) {
 }
 
 /* 
-* Ping Instagram servers with whatever value is in the searchbar (also cleans the value to have no hashtags/whitespace before querying)
+* Ping Instagram with current value of the searchbar (also cleans the value to have no hashtags/whitespace before querying)
 */
 function searchBarGo(){
+
   endDetector.classList.add("no-display");
   let cleanedValue = searchBar.value.replace(/\s|#/g, '');
+
   if (cleanedValue.length > 0) {
     insertionNode.innerHTML = ""; // clear
 
@@ -118,6 +120,7 @@ function loadPlaceholders(amount){
 * returns an HTML element
 */
 function generateCard(source) {
+
  var guts = `
      <div class="image">
          <img src="${source}">
@@ -133,12 +136,14 @@ function generateCard(source) {
  return card;
 }
 
-/* 
+/* Replaces placeholder elements with final content
 * string source - desired image src
 * returns an HTML element
 */
 function shiftPlaceholders() {
+
   let max = placeholdersOnPage;
+
   for (let i = 0; i < max; i++) {
     let e = arr.shift();
     let myImage = new Image();
@@ -164,8 +169,7 @@ function shiftPlaceholders() {
 * returns a Promise object
 */
 function getTagMedia(tagName, page) {
-  console.log(page);
-  console.log("fetch")
+
   let req = new XMLHttpRequest();
   return new Promise((resolve, reject)=> {
     if (!page) {
@@ -193,6 +197,7 @@ function getTagMedia(tagName, page) {
 
     endDetector.classList.remove("no-display");
     shiftPlaceholders();
+
   }).catch((err) => {
     endDetector.classList.add("no-display");
     insertionNode.innerHTML = `Cannot search for "${searchBar.value}. Error: ${err}."`;

@@ -66,7 +66,7 @@ function(entries, observer) {
 ```
  [Example: color change on scroll](https://codepen.io/tutsplus/pen/GyyWvw)
 
----
+
 ## Pre-render image in JS
 
 ```
@@ -86,10 +86,49 @@ Images in JavaScript have a 'complete' property:
  `myImg.complete` returns true after onload
 
 ---
+## Debounce
+A function that is deferred every time an input is triggered soon enough.
+It sets a timer, and when called again, clears and resets the timer. The function runs when the timer finishes.
+
+Most common exmaple is live search, where a search submits the value after the user finishes typing.
+
+```
+let helloWorld = function(){alert("Hello World)};
+
+searchBar.onkeyup = debounce(helloWorld, 1000); //1000 ms
+```
+
+```
+function debounce(callback, wait) {
+  var timeout;
+
+  return () => {
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => callback(...arguments), wait);
+  };
+};
+```
+
+### How does it work?
+#### Closures
+Variables declared inside a function are limited to the function scope and disappear after the function runs. However, you can keep an inner variable persistent by using it in a nested function (known as a closure). Because every function is stored in a reference, the variables used in a function are also referenced and not garbage collected unless the function is also discarded.
+
+In the debounce function, we need to keep a reference of the same timer, otherwise we'd be creating new timers every time someone presses a key.
+#### Spread syntax
+`arguments` is a reserved keyword that contains the arguments of the function. The `...` array spread syntax from ES6 copies contents of the array _and_ applies them to the function.
+
+`arrayClone = [...arrayOriginal];`
+
+`myFunction.apply(null, args)` equivalent to `myFunction(...args)`
+
+
+---
 ## Example Site
 [InstaDictionary](./index.html)
 
-1. Semantic UI framework to create placeholders
+1. [Semantic UI](https://semantic-ui.com/) framework to create placeholders
 2. InsersectionObserver on an invisible div at the bottom of the page
 3. Live search with debounce
 
@@ -97,6 +136,7 @@ Images in JavaScript have a 'complete' property:
 
 # Future: Native HTML spec?
 Google Chrome developers hinted towards adding the attribute to the browser.
+
 `<img loading=”lazy” src=... />`
 
 https://www.youtube.com/watch?v=ZBvvCdhLKdw

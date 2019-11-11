@@ -30,7 +30,7 @@ searchBar.onkeyup = debounce(function() {
     searchLoader.classList.remove("loading");
     isTyping = false;
     searchBarGo();
-  }, 700);
+  }, 1000);
 
   
 window.onresize = throttle(function() {
@@ -70,6 +70,8 @@ observer.observe(endDetector);
       timeout = setTimeout(() => callback(...arguments), wait);
     };
   };
+
+
 
 function throttle(callback, interval) {
   var isRunning
